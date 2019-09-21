@@ -224,6 +224,86 @@ $0
 endsnippet
 
 snippet importcommon "import common package;"  b
+import com.google.common.base.BinaryPredicate;
+import com.google.common.base.Joiner;
+import com.google.common.base.Pair;
+import com.google.common.base.Predicates;
+import com.google.common.base.Splitter;
+import com.google.common.base.Stopwatch;
+import com.google.common.base.Ticker;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSetMultimap;
+import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.Sets;
+import com.google.common.flags.Flag;
+import com.google.common.flags.FlagSpec;
+import com.google.common.flogger.GoogleLogger;
+import com.google.common.inject.testing.ModuleTester;
+import com.google.common.inject.testing.SettableProvider;
+import com.google.common.io.Resources;
+import com.google.common.re2.Matcher;
+import com.google.common.re2.Pattern;
+import com.google.common.truth.Correspondence;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Provides;
+import com.google.inject.Scopes;
+import com.google.inject.servlet.RequestScoped;
+import com.google.inject.testing.fieldbinder.Bind;
+import com.google.inject.testing.fieldbinder.BoundFieldModule;
+import com.google.io.base.Marshaller;
+import com.google.io.file.GoogleFile;
+import com.google.net.util.error.Codes.Code;
+import com.google.testing.testsize.MediumTest;
+import com.google.testing.testsize.MediumTestAttribute;
+import com.google.tracing.testing.TraceContextRule;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.nio.ByteBuffer;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Predicates.compose;
@@ -235,68 +315,12 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
-
-import com.google.common.base.Predicates;
-import com.google.common.base.Joiner;
-import com.google.common.base.Pair;
-import com.google.common.base.Stopwatch;
-import com.google.common.base.Splitter;
-import com.google.common.base.Ticker;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSetMultimap;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.MultimapBuilder;
-import com.google.common.collect.Sets;
-import com.google.common.flogger.GoogleLogger;
-import com.google.common.inject.testing.SettableProvider;
-import com.google.common.io.Resources;
-import com.google.common.re2.Pattern;
-import com.google.common.re2.Matcher;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Provides;
-import com.google.inject.testing.fieldbinder.Bind;
-import com.google.inject.testing.fieldbinder.BoundFieldModule;
-import com.google.net.util.error.Codes.Code;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.assertThrows;
 $0
+endsnippet
+
+snippet throw "throw exception" b
+throw new $0IllegalArgumentException();
 endsnippet
 
 snippet String.format "String.format();" b
@@ -544,4 +568,372 @@ while ($1)`!p nl(snip)`{
 }
 endsnippet
 
-# vim:ft=snippets:
+# start final (index: kasldfhjo)
+snippet BinaryPredicate
+import com.google.common.base.BinaryPredicate;
+endsnippet
+
+snippet Joiner
+import com.google.common.base.Joiner;
+endsnippet
+
+snippet Pair
+import com.google.common.base.Pair;
+endsnippet
+
+snippet Predicates
+import com.google.common.base.Predicates;
+endsnippet
+
+snippet Splitter
+import com.google.common.base.Splitter;
+endsnippet
+
+snippet Stopwatch
+import com.google.common.base.Stopwatch;
+endsnippet
+
+snippet Ticker
+import com.google.common.base.Ticker;
+endsnippet
+
+snippet ImmutableList
+import com.google.common.collect.ImmutableList;
+endsnippet
+
+snippet ImmutableMap
+import com.google.common.collect.ImmutableMap;
+endsnippet
+
+snippet ImmutableMultimap
+import com.google.common.collect.ImmutableMultimap;
+endsnippet
+
+snippet ImmutableSet
+import com.google.common.collect.ImmutableSet;
+endsnippet
+
+snippet ImmutableSetMultimap
+import com.google.common.collect.ImmutableSetMultimap;
+endsnippet
+
+snippet ImmutableTable
+import com.google.common.collect.ImmutableTable;
+endsnippet
+
+snippet Iterables
+import com.google.common.collect.Iterables;
+endsnippet
+
+snippet Lists
+import com.google.common.collect.Lists;
+endsnippet
+
+snippet Maps
+import com.google.common.collect.Maps;
+endsnippet
+
+snippet Multimap
+import com.google.common.collect.Multimap;
+endsnippet
+
+snippet MultimapBuilder
+import com.google.common.collect.MultimapBuilder;
+endsnippet
+
+snippet Sets
+import com.google.common.collect.Sets;
+endsnippet
+
+snippet Flag
+import com.google.common.flags.Flag;
+endsnippet
+
+snippet FlagSpec
+import com.google.common.flags.FlagSpec;
+endsnippet
+
+snippet GoogleLogger
+import com.google.common.flogger.GoogleLogger;
+endsnippet
+
+snippet ModuleTester
+import com.google.common.inject.testing.ModuleTester;
+endsnippet
+
+snippet SettableProvider
+import com.google.common.inject.testing.SettableProvider;
+endsnippet
+
+snippet Resources
+import com.google.common.io.Resources;
+endsnippet
+
+snippet Matcher
+import com.google.common.re2.Matcher;
+endsnippet
+
+snippet Pattern
+import com.google.common.re2.Pattern;
+endsnippet
+
+snippet Correspondence
+import com.google.common.truth.Correspondence;
+endsnippet
+
+snippet AbstractModule
+import com.google.inject.AbstractModule;
+endsnippet
+
+snippet Guice
+import com.google.inject.Guice;
+endsnippet
+
+snippet Provides
+import com.google.inject.Provides;
+endsnippet
+
+snippet Scopes
+import com.google.inject.Scopes;
+endsnippet
+
+snippet RequestScoped
+import com.google.inject.servlet.RequestScoped;
+endsnippet
+
+snippet Bind
+import com.google.inject.testing.fieldbinder.Bind;
+endsnippet
+
+snippet BoundFieldModule
+import com.google.inject.testing.fieldbinder.BoundFieldModule;
+endsnippet
+
+snippet Marshaller
+import com.google.io.base.Marshaller;
+endsnippet
+
+snippet GoogleFile
+import com.google.io.file.GoogleFile;
+endsnippet
+
+snippet Code
+import com.google.net.util.error.Codes.Code;
+endsnippet
+
+snippet MediumTest
+import com.google.testing.testsize.MediumTest;
+endsnippet
+
+snippet MediumTestAttribute
+import com.google.testing.testsize.MediumTestAttribute;
+endsnippet
+
+snippet TraceContextRule
+import com.google.tracing.testing.TraceContextRule;
+endsnippet
+
+snippet File
+import java.io.File;
+endsnippet
+
+snippet FileInputStream
+import java.io.FileInputStream;
+endsnippet
+
+snippet FileNotFoundException
+import java.io.FileNotFoundException;
+endsnippet
+
+snippet ByteBuffer
+import java.nio.ByteBuffer;
+endsnippet
+
+snippet Clock
+import java.time.Clock;
+endsnippet
+
+snippet Duration
+import java.time.Duration;
+endsnippet
+
+snippet Instant
+import java.time.Instant;
+endsnippet
+
+snippet ArrayList
+import java.util.ArrayList;
+endsnippet
+
+snippet Arrays
+import java.util.Arrays;
+endsnippet
+
+snippet BitSet
+import java.util.BitSet;
+endsnippet
+
+snippet Collection
+import java.util.Collection;
+endsnippet
+
+snippet Collections
+import java.util.Collections;
+endsnippet
+
+snippet Comparator
+import java.util.Comparator;
+endsnippet
+
+snippet HashMap
+import java.util.HashMap;
+endsnippet
+
+snippet HashSet
+import java.util.HashSet;
+endsnippet
+
+snippet Iterator
+import java.util.Iterator;
+endsnippet
+
+snippet LinkedHashMap
+import java.util.LinkedHashMap;
+endsnippet
+
+snippet LinkedHashSet
+import java.util.LinkedHashSet;
+endsnippet
+
+snippet List
+import java.util.List;
+endsnippet
+
+snippet Map
+import java.util.Map;
+endsnippet
+
+snippet Optional
+import java.util.Optional;
+endsnippet
+
+snippet Set
+import java.util.Set;
+endsnippet
+
+snippet ExecutionException
+import java.util.concurrent.ExecutionException;
+endsnippet
+
+snippet Function
+import java.util.function.Function;
+endsnippet
+
+snippet Predicate
+import java.util.function.Predicate;
+endsnippet
+
+snippet Collectors
+import java.util.stream.Collectors;
+endsnippet
+
+snippet IntStream
+import java.util.stream.IntStream;
+endsnippet
+
+snippet Stream
+import java.util.stream.Stream;
+endsnippet
+
+snippet Nullable
+import javax.annotation.Nullable;
+endsnippet
+
+snippet Inject
+import javax.inject.Inject;
+endsnippet
+
+snippet Provider
+import javax.inject.Provider;
+endsnippet
+
+snippet Singleton
+import javax.inject.Singleton;
+endsnippet
+
+snippet After
+import org.junit.After;
+endsnippet
+
+snippet Before
+import org.junit.Before;
+endsnippet
+
+snippet Rule
+import org.junit.Rule;
+endsnippet
+
+snippet Test
+import org.junit.Test;
+endsnippet
+
+snippet TemporaryFolder
+import org.junit.rules.TemporaryFolder;
+endsnippet
+
+snippet RunWith
+import org.junit.runner.RunWith;
+endsnippet
+
+snippet JUnit4
+import org.junit.runners.JUnit4;
+endsnippet
+
+snippet checkArgument
+import static com.google.common.base.Preconditions.checkArgument;
+endsnippet
+
+snippet checkNotNull
+import static com.google.common.base.Preconditions.checkNotNull;
+endsnippet
+
+snippet compose
+import static com.google.common.base.Predicates.compose;
+endsnippet
+
+snippet toImmutableList
+import static com.google.common.collect.ImmutableList.toImmutableList;
+endsnippet
+
+snippet toImmutableSet
+import static com.google.common.collect.ImmutableSet.toImmutableSet;
+endsnippet
+
+snippet assertThat
+import static com.google.common.truth.Truth.assertThat;
+endsnippet
+
+snippet UTF_8
+import static java.nio.charset.StandardCharsets.UTF_8;
+endsnippet
+
+snippet identity
+import static java.util.function.Function.identity;
+endsnippet
+
+snippet toList
+import static java.util.stream.Collectors.toList;
+endsnippet
+
+snippet toMap
+import static java.util.stream.Collectors.toMap;
+endsnippet
+
+snippet toSet
+import static java.util.stream.Collectors.toSet;
+endsnippet
+
+snippet assertThrows
+import static org.junit.Assert.assertThrows;
+endsnippet
+

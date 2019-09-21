@@ -38,6 +38,6 @@ function! GenerateDataPol()
 endfunction
 
 " datapol annotation
-nnoremap <leader>1 iimport "storage/datapol/annotations/proto/semantic_annotations.proto";<cr><cr>option (datapol.file_vetting_status) = "latest";<esc>
-nnoremap <leader>2 :call GenerateDataPol()<cr>
-nnoremap <leader>3 $A<cr>"//storage/datapol/annotations/proto:datapol_annotations",<esc>
+nnoremap <leader>11 iimport "storage/datapol/annotations/proto/semantic_annotations.proto";<cr><cr>option (datapol.file_vetting_status) = "latest";<esc>
+nnoremap <leader>22 :call GenerateDataPol()<cr>
+nnoremap <leader>33 $A<cr>"//storage/datapol/annotations/proto:datapol_annotations",<esc>
